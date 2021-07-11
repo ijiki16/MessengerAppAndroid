@@ -11,7 +11,7 @@
         android:theme="@style/Theme.MessengerApp">
         <activity android:name=".MainActivity">
         </activity>
-        <activity android:name=".LauncherActivity">
+        <activity android:name=".launcher.view.LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

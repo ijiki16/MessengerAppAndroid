@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_horizontal"
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/user_avatar"
@@ -25,26 +26,76 @@
         android:id="@+id/nickname_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_input_height"
-        android:layout_marginTop="@dimen/login_input_margin_top"
-        android:layout_marginHorizontal="@dimen/login_input_margin_horizontal"
+        android:layout_marginHorizontal="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_xxl"
         android:background="@drawable/bg_login_input"
-        android:hint="@string/login_nickname"
-        android:gravity="center"/>
-
+        android:gravity="center"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/dark_gray"
+        android:hint="@string/login_nickname" />
 
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_input_height"
-        android:layout_marginTop="@dimen/login_input_margin_top_sm"
-        android:layout_marginHorizontal="@dimen/login_input_margin_horizontal"
+        android:layout_marginHorizontal="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_s"
         android:background="@drawable/bg_login_input"
-        android:hint="@string/login_nickname"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/user_avatar"
+        android:hint="@string/login_password"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/dark_gray"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_avatar" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/about_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/login_input_height"
+        android:layout_marginHorizontal="@dimen/margin_l"
+        android:layout_marginTop="@dimen/margin_s"
+        android:background="@drawable/bg_login_input"
+        android:gravity="center"
+        android:hint="@string/login_about"
+        android:visibility="gone"
+        android:textColor="@color/dark_gray"
+        android:textColorHint="@color/dark_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_avatar" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sign_btn"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/bg_login_btn"
+        android:text="@string/sign_in"
+        android:textColor="@color/white"
+        android:textSize="@dimen/login_btn_text_size" />
+
+
+    <TextView
+        android:id="@+id/not_registered_tv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:textColor="@color/dark_gray"
+        android:gravity="center|bottom"
+        android:text="@string/not_registered" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sign_up_btn"
+        android:layout_width="@dimen/login_btn_width"
+        android:layout_height="@dimen/login_btn_height"
+        android:layout_marginTop="@dimen/margin_xxs"
+        android:layout_marginBottom="@dimen/margin_s"
+        android:background="@drawable/bg_login_btn_secondary"
+        android:text="@string/sign_up"
+        android:textColor="@color/dark_gray"
+        android:textSize="@dimen/login_btn_text_size" />
 
 
 </LinearLayout>

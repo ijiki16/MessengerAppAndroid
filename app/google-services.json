@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "828143852109",
+    "firebase_url": "https://messengerapp-f15ac-default-rtdb.firebaseio.com",
+    "project_id": "messengerapp-f15ac",
+    "storage_bucket": "messengerapp-f15ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828143852109:android:e46727b49f09d098291a04",
+        "android_client_info": {
+          "package_name": "com.ijiki16.messengerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "828143852109-cfl0pbnp8snsfdhqcsa72kne92ooca5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvg1E60F-v8va9V300SDDEaYvVoWIiIxk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "828143852109-cfl0pbnp8snsfdhqcsa72kne92ooca5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

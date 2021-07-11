@@ -2,4 +2,8 @@
     <string name="app_name">Messenger App</string>
     <string name="login_nickname">Enter your nickname</string>
     <string name="login_password">Enter your password</string>
+    <string name="login_about">What I do</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="not_registered">Not Registered?</string>
 </resources>
