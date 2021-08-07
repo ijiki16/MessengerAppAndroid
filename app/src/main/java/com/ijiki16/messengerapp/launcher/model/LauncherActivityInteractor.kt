@@ -3,7 +3,6 @@ package com.ijiki16.messengerapp.launcher.model
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
-import java.security.MessageDigest
 
 public class LauncherActivityInteractor(private val presenter: LauncherActivityContract.Presenter) {
 
