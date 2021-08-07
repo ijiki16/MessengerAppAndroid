@@ -4,7 +4,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
 
-public class LauncherActivityInteractor(private val presenter: LauncherActivityContract.Presenter) {
+class LauncherActivityInteractor(private val presenter: LauncherActivityContract.Presenter) {
 
     companion object {
         const val DB_USERS = "users"
