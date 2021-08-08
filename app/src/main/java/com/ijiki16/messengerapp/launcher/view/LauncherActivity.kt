@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import com.ijiki16.messengerapp.MainActivity
+import com.ijiki16.messengerapp.main.MainActivity
 import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.databinding.ActivityLauncherBinding
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
