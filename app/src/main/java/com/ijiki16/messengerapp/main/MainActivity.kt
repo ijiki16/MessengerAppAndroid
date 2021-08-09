@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.databinding.ActivityMainBinding
 import com.ijiki16.messengerapp.main.home.HomeFragment
+import com.ijiki16.messengerapp.main.profile.view.ProfileFragment
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {

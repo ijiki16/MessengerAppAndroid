@@ -70,7 +70,7 @@
         android:id="@+id/sign_btn"
         android:layout_width="@dimen/login_btn_width"
         android:layout_height="@dimen/login_btn_height"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="@dimen/margin_m"
         android:background="@drawable/bg_login_btn"
         android:text="@string/sign_in"
         android:textColor="@color/white"

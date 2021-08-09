@@ -23,4 +23,5 @@
     <dimen name="app_bar_height">180dp</dimen>
     <dimen name="app_bar_bg_height">250dp</dimen>
     <dimen name="bottom_app_bar_height">56dp</dimen>
+    <dimen name="contact_list_loader_height">60dp</dimen>
 </resources>

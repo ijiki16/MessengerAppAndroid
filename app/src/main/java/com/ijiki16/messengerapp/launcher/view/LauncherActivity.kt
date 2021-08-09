@@ -8,6 +8,7 @@ import android.view.View
 import com.ijiki16.messengerapp.main.MainActivity
 import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.databinding.ActivityLauncherBinding
+import com.ijiki16.messengerapp.infrastructure.AppPreferences
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
 import com.ijiki16.messengerapp.launcher.presenter.LauncherActivityPresenterImpl
 
@@ -22,7 +23,7 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        presenter = LauncherActivityPresenterImpl(this, getPreferences(Context.MODE_PRIVATE))
+        presenter = LauncherActivityPresenterImpl(this, AppPreferences(getPreferences(Context.MODE_PRIVATE)))
 
         setViews()
         if (presenter.loginWithSavedUser()) { // user was saved. wait for login response.

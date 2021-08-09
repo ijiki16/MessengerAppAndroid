@@ -1,6 +1,6 @@
 package com.ijiki16.messengerapp.launcher.presenter
 
-import android.content.SharedPreferences
+import com.ijiki16.messengerapp.infrastructure.AppPreferences
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
 import com.ijiki16.messengerapp.launcher.model.LauncherActivityInteractor
 import com.ijiki16.messengerapp.launcher.model.LoginResult
@@ -8,14 +8,9 @@ import java.security.MessageDigest
 
 class LauncherActivityPresenterImpl(
     private val view: LauncherActivityContract.View,
-    private val preferences: SharedPreferences
+    private val preferences: AppPreferences
     ): LauncherActivityContract.Presenter {
 
-    companion object {
-        const val PSWD_HASH_ALGO = "SHA-256"
-        const val PREF_USERNAME = "username"
-        const val PREF_PASSWORD = "password"
-    }
 
     private val interactor = LauncherActivityInteractor(this)
 
@@ -26,12 +21,11 @@ class LauncherActivityPresenterImpl(
         interactor.logIn(username, hashStr(password))
 
     override fun loginWithSavedUser(): Boolean {
-        val username = preferences.getString(PREF_USERNAME, "")
-        val password = preferences.getString(PREF_PASSWORD, "")
-        return if (username.isNullOrBlank() || password.isNullOrBlank()) {
+        val user = preferences.getUser()
+        return if (user.username.isBlank() || user.password.isBlank()) {
             false
         } else {
-            interactor.logIn(username, password)
+            interactor.logIn(user.username, user.password)
             true
         }
     }
@@ -44,11 +38,7 @@ class LauncherActivityPresenterImpl(
         }
 
     override fun saveUserLocally(username: String, password: String) {
-        with(preferences.edit()) {
-            putString(PREF_USERNAME, username)
-            putString(PREF_PASSWORD, password)
-            apply()
-        }
+        preferences.saveUser(username, password)
     }
 
     private fun hashStr(inStr: String) : String {
@@ -56,4 +46,9 @@ class LauncherActivityPresenterImpl(
         messageDigest.update(inStr.toByteArray())
         return String(messageDigest.digest())
     }
+
+    companion object {
+        const val PSWD_HASH_ALGO = "SHA-256"
+    }
+
 }
