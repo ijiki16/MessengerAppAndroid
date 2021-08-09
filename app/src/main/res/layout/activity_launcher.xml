@@ -9,7 +9,6 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/user_avatar"
         android:layout_width="@dimen/login_image_radius"
         android:layout_height="@dimen/login_image_radius"
         android:layout_marginTop="@dimen/login_image_margin_top"
@@ -17,9 +16,10 @@
         app:cardElevation="0dp">
 
         <ImageView
+            android:id="@+id/user_avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/avatar_image_placeholder" />
+            tools:src="@drawable/avatar_image_placeholder" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.textfield.TextInputEditText

@@ -1,6 +1,7 @@
 package com.ijiki16.messengerapp.infrastructure
 
 import android.content.SharedPreferences
+import com.google.firebase.auth.FirebaseAuth
 import com.ijiki16.messengerapp.main.profile.model.UserInfo
 
 class AppPreferences {
@@ -17,7 +18,7 @@ class AppPreferences {
         val username = sharedPreferences.getString(PREF_USERNAME, "") ?: ""
         val password = sharedPreferences.getString(PREF_PASSWORD, "") ?: ""
         val about = sharedPreferences.getString(PREF_ABOUT, "") ?: ""
-        val profileUrl = sharedPreferences.getString(PREF_PROFILE, "") ?: ""
+        val profileUrl = sharedPreferences.getString(PREF_PROFILE, DEFAULT_PROFILE_URL) ?: DEFAULT_PROFILE_URL
 
         return UserInfo(profileUrl, username, password, about)
     }
@@ -27,7 +28,7 @@ class AppPreferences {
             putString(PREF_USERNAME, "")
             putString(PREF_PASSWORD, "")
             putString(PREF_ABOUT, "")
-            putString(PREF_PROFILE, "")
+            putString(PREF_PROFILE, DEFAULT_PROFILE_URL)
             return commit()
         }
     }
@@ -45,6 +46,8 @@ class AppPreferences {
             }
             return instance!!
         }
+
+        private const val DEFAULT_PROFILE_URL = "public/avatar_image_placeholder.png"
 
         const val PREF_USERNAME = "username"
         const val PREF_PASSWORD = "password"

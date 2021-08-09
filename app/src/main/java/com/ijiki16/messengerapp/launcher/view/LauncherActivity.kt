@@ -5,12 +5,20 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.main.MainActivity
 import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.databinding.ActivityLauncherBinding
 import com.ijiki16.messengerapp.infrastructure.AppPreferences
+import com.ijiki16.messengerapp.infrastructure.GlideApp
 import com.ijiki16.messengerapp.launcher.LauncherActivityContract
 import com.ijiki16.messengerapp.launcher.presenter.LauncherActivityPresenterImpl
+import com.ijiki16.messengerapp.main.profile.model.UserInfo
 
 class LauncherActivity : LauncherActivityContract.View, Activity() {
 
@@ -22,6 +30,7 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        Firebase.auth.signInAnonymously()
 
         presenter = LauncherActivityPresenterImpl(this, AppPreferences.getInstance(getPreferences(Context.MODE_PRIVATE)))
 
@@ -53,6 +62,17 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
         binding.signUpBtn.setOnClickListener {
             setRegisteringState()
         }
+
+    }
+
+    override fun onUserLoaded(user: UserInfo) {
+        val storageReference = Firebase.storage.reference.child(user.profilePictureUrl)
+
+        GlideApp.with(this)
+            .load(storageReference)
+            .placeholder(R.drawable.ic_baseline_account_circle_96)
+            .error(R.drawable.ic_baseline_cancel_96)
+            .into(binding.userAvatar)
     }
 
     private fun setLoadingState(isLoading: Boolean) {

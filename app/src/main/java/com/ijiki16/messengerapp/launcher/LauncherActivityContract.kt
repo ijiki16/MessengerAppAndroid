@@ -1,6 +1,7 @@
 package com.ijiki16.messengerapp.launcher
 
 import com.ijiki16.messengerapp.launcher.model.LoginResult
+import com.ijiki16.messengerapp.main.profile.model.UserInfo
 
 interface LauncherActivityContract {
 
@@ -16,5 +17,6 @@ interface LauncherActivityContract {
     interface View {
         fun loggedIn()
         fun showError(error: String)
+        fun onUserLoaded(user: UserInfo)
     }
 }

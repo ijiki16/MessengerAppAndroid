@@ -22,6 +22,7 @@ class LauncherActivityPresenterImpl(
 
     override fun loginWithSavedUser(): Boolean {
         val user = preferences.getUser()
+        view.onUserLoaded(user)
         return if (user.username.isBlank() || user.password.isBlank()) {
             false
         } else {
