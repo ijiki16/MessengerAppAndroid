@@ -23,11 +23,16 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        presenter = LauncherActivityPresenterImpl(this, AppPreferences(getPreferences(Context.MODE_PRIVATE)))
+        presenter = LauncherActivityPresenterImpl(this, AppPreferences.getInstance(getPreferences(Context.MODE_PRIVATE)))
 
         setViews()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setLoadingState(false)
         if (presenter.loginWithSavedUser()) { // user was saved. wait for login response.
-            // TODO: Loader
+            setLoadingState(true)
         }
     }
 
@@ -42,14 +47,22 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
             } else {
                 presenter.logInUser(username, password)
             }
-
-            // TODO: Loader
-
+            setLoadingState(true)
         }
 
         binding.signUpBtn.setOnClickListener {
             setRegisteringState()
         }
+    }
+
+    private fun setLoadingState(isLoading: Boolean) {
+        binding.nicknameEt.isEnabled = !isLoading
+        binding.passwordEt.isEnabled = !isLoading
+        binding.aboutEt.isEnabled = !isLoading
+        binding.signUpBtn.isEnabled = !isLoading
+        binding.signBtn.isEnabled = !isLoading
+
+        binding.loadingPb.visibility = if(isLoading) View.VISIBLE else View.GONE
     }
 
     private fun setRegisteringState() {
@@ -66,6 +79,7 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
     }
 
     override fun showError(error: String) {
+        setLoadingState(false)
         // TODO: add feedback for errors.
     }
 

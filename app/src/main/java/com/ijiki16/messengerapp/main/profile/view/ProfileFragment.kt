@@ -26,7 +26,7 @@ class ProfileFragment : ProfileContract.View, Fragment() {
         binding = FragmentProfileBinding.inflate(layoutInflater)
         presenter = ProfilePresenterImpl(
             this,
-            AppPreferences(requireActivity().getPreferences(Context.MODE_PRIVATE))
+            AppPreferences.getInstance(requireActivity().getPreferences(Context.MODE_PRIVATE))
         )
         return binding.root
     }

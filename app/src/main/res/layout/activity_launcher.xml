@@ -76,6 +76,14 @@
         android:textColor="@color/white"
         android:textSize="@dimen/login_btn_text_size" />
 
+    <ProgressBar
+        android:id="@+id/loading_pb"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_width="@dimen/spacing_m"
+        android:layout_height="@dimen/spacing_m"/>
+
 
     <TextView
         android:id="@+id/not_registered_tv"

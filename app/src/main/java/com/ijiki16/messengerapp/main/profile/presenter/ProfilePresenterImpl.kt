@@ -19,7 +19,7 @@ class ProfilePresenterImpl(
     }
 
     override fun logout() {
-        preferences.logout()
+        val result = preferences.logout()
         view.loggedOut()
     }
 
