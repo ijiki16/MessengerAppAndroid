@@ -13,4 +13,8 @@
     <color name="gray">#aaa</color>
     <color name="dark_gray">#777</color>
     <color name="blue">#5479F1</color>
+    
+    <color name="light_gray">#CBDEDEFD</color>
+    <color name="gray_700">#5A5A5A</color>
+    <color name="gray_800">#4E4E4E</color>
 </resources>

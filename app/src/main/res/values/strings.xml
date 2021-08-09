@@ -12,4 +12,5 @@
     <string name="not_registered">Not Registered?</string>
     <string name="label_home">Home</string>
     <string name="label_profile">Profile</string>
+    <string name="search">Search</string>
 </resources>

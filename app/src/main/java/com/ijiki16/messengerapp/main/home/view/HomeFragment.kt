@@ -16,6 +16,8 @@ import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
 import com.ijiki16.messengerapp.main.home.HomeContract
 import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
 import com.ijiki16.messengerapp.main.home.presenter.HomePresenterImpl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
 
 class HomeFragment : HomeContract.View, Fragment() {
@@ -33,12 +35,16 @@ class HomeFragment : HomeContract.View, Fragment() {
         return binding.root
     }
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViews()
         loadMore()
     }
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     private fun setupViews() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -55,11 +61,17 @@ class HomeFragment : HomeContract.View, Fragment() {
         })
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
+
+        binding.searchView.setOnNewSearchRequestListener{
+            loadMore(it, 0)
+        }
     }
 
-    private fun loadMore() {
+    @ExperimentalCoroutinesApi
+    @FlowPreview
+    private fun loadMore(searchTerm: String = binding.searchView.searchTerm, from: Int = adapter.data.size) {
         adapter.setLoading()
-        presenter.loadMore()
+        presenter.loadMore(searchTerm, from)
     }
 
     override fun showError(error: String) {
@@ -116,8 +128,10 @@ class HomeFragment : HomeContract.View, Fragment() {
             if(_isLoading) data.size + 1 else data.size
 
         fun setLoading() {
-            _isLoading = true
-            notifyDataSetChanged()
+            if(!_isLoading) {
+                _isLoading = true
+                notifyDataSetChanged()
+            }
         }
 
         fun setData(newData: List<HomeMessageEntity>) {

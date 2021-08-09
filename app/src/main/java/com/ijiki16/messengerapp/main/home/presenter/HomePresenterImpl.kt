@@ -6,7 +6,7 @@ class HomePresenterImpl(
     private val view: HomeContract.View
 ): HomeContract.Presenter {
 
-    override fun loadMore() {
+    override fun loadMore(term: String, from: Int) {
         //TODO: do some loading from server
 //        view.moreLoaded()
     }

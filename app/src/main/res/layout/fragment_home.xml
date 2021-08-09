@@ -35,9 +35,16 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.MessengerApp.PopupOverlay" />
+                android:layout_height="@dimen/search_view_container_height"
+                android:layout_gravity="bottom"
+                app:popupTheme="@style/Theme.MessengerApp.PopupOverlay">
+
+                <com.ijiki16.messengerapp.searchview.MessengerSearchView
+                    android:id="@+id/search_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

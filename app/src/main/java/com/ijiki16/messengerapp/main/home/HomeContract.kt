@@ -5,7 +5,7 @@ import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
 interface HomeContract {
 
     interface Presenter {
-        fun loadMore()
+        fun loadMore(term: String, from: Int)
     }
 
     interface View {
