@@ -14,7 +14,7 @@
         android:layout_width="@dimen/login_image_radius"
         android:layout_height="@dimen/login_image_radius"
         android:layout_marginTop="@dimen/login_image_margin_top"
-        app:cardCornerRadius="@dimen/login_image_corner_radius"
+        app:cardCornerRadius="@dimen/profile_avatar_corner_radius"
         app:cardElevation="0dp">
 
         <ImageView
@@ -28,8 +28,8 @@
         android:id="@+id/nickname_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_input_height"
-        android:layout_marginHorizontal="@dimen/margin_l"
-        android:layout_marginTop="@dimen/margin_xxl"
+        android:layout_marginHorizontal="@dimen/spacing_l"
+        android:layout_marginTop="@dimen/spacing_xxl"
         android:background="@drawable/bg_login_input"
         android:hint="@string/profile_nickname"
         android:gravity="center"
@@ -40,8 +40,8 @@
         android:id="@+id/about_et"
         android:layout_width="match_parent"
         android:layout_height="@dimen/login_input_height"
-        android:layout_marginHorizontal="@dimen/margin_l"
-        android:layout_marginTop="@dimen/margin_s"
+        android:layout_marginHorizontal="@dimen/spacing_l"
+        android:layout_marginTop="@dimen/spacing_s"
         android:background="@drawable/bg_login_input"
         android:gravity="center"
         android:hint="@string/profile_about"
@@ -55,7 +55,7 @@
         android:id="@+id/update_btn"
         android:layout_width="@dimen/login_btn_width"
         android:layout_height="@dimen/login_btn_height"
-        android:layout_marginTop="@dimen/margin_l"
+        android:layout_marginTop="@dimen/spacing_l"
         android:background="@drawable/bg_login_btn"
         android:text="@string/update"
         android:textColor="@color/white"
@@ -65,8 +65,8 @@
         android:id="@+id/sign_out_btn"
         android:layout_width="@dimen/login_btn_width"
         android:layout_height="@dimen/login_btn_height"
-        android:layout_marginTop="@dimen/margin_xs"
-        android:layout_marginBottom="@dimen/margin_s"
+        android:layout_marginTop="@dimen/spacing_xs"
+        android:layout_marginBottom="@dimen/spacing_s"
         android:background="@drawable/bg_login_btn_secondary"
         android:text="@string/sign_out"
         android:textColor="@color/dark_gray"
@@ -76,8 +76,8 @@
         android:id="@+id/loading_pb"
         android:visibility="gone"
         tools:visibility="visible"
-        android:layout_width="@dimen/margin_s"
-        android:layout_height="@dimen/margin_s"/>
+        android:layout_width="@dimen/spacing_s"
+        android:layout_height="@dimen/spacing_s"/>
 
 
 </LinearLayout>

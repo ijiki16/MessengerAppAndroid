@@ -1,4 +1,4 @@
-package com.ijiki16.messengerapp.main.home
+package com.ijiki16.messengerapp.main.home.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,15 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.databinding.FragmentHomeBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
+import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
+import com.ijiki16.messengerapp.main.home.HomeContract
+import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
+import com.ijiki16.messengerapp.main.home.presenter.HomePresenterImpl
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : HomeContract.View, Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private var isLoading = true //TODO: move this to presenter
+    private lateinit var presenter: HomeContract.Presenter
     private var adapter = ContactListAdapter()
 
     override fun onCreateView(
@@ -23,6 +29,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
+        presenter = HomePresenterImpl(this)
         return binding.root
     }
 
@@ -46,10 +53,21 @@ class HomeFragment : Fragment() {
                 }
             }
         })
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
     }
 
     private fun loadMore() {
-        // TODO: load more data
+        adapter.setLoading()
+        presenter.loadMore()
+    }
+
+    override fun showError(error: String) {
+        // TODO: show error here
+    }
+
+    override fun moreLoaded(data: List<HomeMessageEntity>) {
+        adapter.setData(data)
     }
 
     companion object {
@@ -74,9 +92,9 @@ class HomeFragment : Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             return if (viewType == LIST_ITEM) {
-                ContactListViewHolder(ItemContactListBinding.inflate(inflater))
+                ContactListViewHolder(ItemContactListBinding.inflate(inflater, parent, false))
             } else {
-                ContactsLoadingItemViewHolder(ItemContactListLoadingBinding.inflate(inflater))
+                ContactsLoadingItemViewHolder(ItemContactListLoadingBinding.inflate(inflater, parent, false))
             }
         }
 
@@ -95,7 +113,7 @@ class HomeFragment : Fragment() {
         }
 
         override fun getItemCount(): Int =
-            if(isLoading) data.size + 1 else data.size
+            if(_isLoading) data.size + 1 else data.size
 
         fun setLoading() {
             _isLoading = true
@@ -112,11 +130,19 @@ class HomeFragment : Fragment() {
     }
 
     inner class ContactListViewHolder(
-        binding: ItemContactListBinding
+        private val binding: ItemContactListBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun setData(data: HomeMessageEntity) {
-            // TODO: draw with this data
+            Glide.with(requireContext())
+                .load(data.userProfileUrl)
+                .placeholder(R.drawable.ic_baseline_account_circle_96)
+                .error(R.drawable.ic_baseline_cancel_96)
+                .into(binding.userAvatarIv)
+
+            binding.userNicknameTv.text = data.userNickname
+            binding.lastMessageTv.text = data.lastMessage
+            binding.lastMessageTimeTv.text = data.lastMessageDateTimestamp.toHumanReadableDate()
         }
 
     }

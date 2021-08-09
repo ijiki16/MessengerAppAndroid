@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_xxs">6dp</dimen>
-    <dimen name="margin_xs">12dp</dimen>
-    <dimen name="margin_s">18dp</dimen>
-    <dimen name="margin_m">24dp</dimen>
-    <dimen name="margin_l">30dp</dimen>
-    <dimen name="margin_xl">36dp</dimen>
-    <dimen name="margin_xxl">42dp</dimen>
+    <dimen name="spacing_xxs">6dp</dimen>
+    <dimen name="spacing_xs">12dp</dimen>
+    <dimen name="spacing_s">18dp</dimen>
+    <dimen name="spacing_m">24dp</dimen>
+    <dimen name="spacing_l">30dp</dimen>
+    <dimen name="spacing_xl">36dp</dimen>
+    <dimen name="spacing_xxl">42dp</dimen>
 
     <dimen name="login_image_radius">150dp</dimen>
     <dimen name="login_image_margin_top">100dp</dimen>
     <dimen name="login_image_corner_radius">75dp</dimen>
+    <dimen name="home_contacts_list_radius">50dp</dimen>
+    <dimen name="profile_avatar_corner_radius">75dp</dimen>
     <dimen name="login_input_height">40dp</dimen>
     <dimen name="login_input_margin_top">75dp</dimen>
     <dimen name="login_input_margin_top_sm">20dp</dimen>
@@ -24,4 +26,5 @@
     <dimen name="app_bar_bg_height">250dp</dimen>
     <dimen name="bottom_app_bar_height">56dp</dimen>
     <dimen name="contact_list_loader_height">60dp</dimen>
+    <dimen name="contact_list_item_height">100dp</dimen>
 </resources>

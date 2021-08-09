@@ -15,7 +15,7 @@ class ProfilePresenterImpl(
 
     override fun updateProfile(username: String, about: String) {
         // TODO: call service here to update profile information
-        view.profileUpdated()
+//        view.profileUpdated()
     }
 
     override fun logout() {
