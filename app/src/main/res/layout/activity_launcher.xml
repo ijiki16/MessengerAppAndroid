@@ -19,7 +19,7 @@
             android:id="@+id/user_avatar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:src="@drawable/avatar_image_placeholder" />
+            android:src="@drawable/avatar_image_placeholder" />
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.textfield.TextInputEditText

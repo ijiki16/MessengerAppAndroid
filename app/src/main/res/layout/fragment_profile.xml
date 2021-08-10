@@ -17,6 +17,12 @@
         app:cardCornerRadius="@dimen/profile_avatar_corner_radius"
         app:cardElevation="0dp">
 
+        <ProgressBar
+            android:id="@+id/profile_picture_pb"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
         <ImageView
             android:id="@+id/profile_picture_iv"
             android:layout_width="match_parent"

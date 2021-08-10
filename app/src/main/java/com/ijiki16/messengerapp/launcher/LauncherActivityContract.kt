@@ -6,17 +6,16 @@ import com.ijiki16.messengerapp.main.profile.model.UserInfo
 interface LauncherActivityContract {
 
     interface Presenter {
-        fun registerUser(username: String, password: String, about: String)
-        fun logInUser(username: String, password: String)
-        fun loginWithSavedUser(): Boolean
 
+        fun getUserInfo(userId: String)
+        fun saveUserInfo(userId: String, username: String, about: String)
+
+        fun saveUserInfoLocally(userInfo: UserInfo)
         fun onLogInResult(result: LoginResult)
-        fun saveUserLocally(username: String, password: String)
     }
 
     interface View {
         fun loggedIn()
         fun showError(error: String)
-        fun onUserLoaded(user: UserInfo)
     }
 }
