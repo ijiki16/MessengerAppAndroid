@@ -1,54 +1,44 @@
-package com.ijiki16.messengerapp.main.home.view
+package com.ijiki16.messengerapp.users
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.R
-import com.ijiki16.messengerapp.databinding.FragmentHomeBinding
+import com.ijiki16.messengerapp.databinding.ActivityUsersBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
+import com.ijiki16.messengerapp.databinding.ItemUserBinding
 import com.ijiki16.messengerapp.infrastructure.GlideApp
 import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
-import com.ijiki16.messengerapp.main.home.HomeContract
 import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
-import com.ijiki16.messengerapp.main.home.presenter.HomePresenterImpl
+import com.ijiki16.messengerapp.main.home.view.HomeFragment
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
+class UsersActivity : AppCompatActivity() {
 
-class HomeFragment : HomeContract.View, Fragment() {
+    private lateinit var  binding: ActivityUsersBinding
+    private val adapter = UsersListAdapter()
 
-    private lateinit var binding: FragmentHomeBinding
-    private lateinit var presenter: HomeContract.Presenter
-    private val adapter = ContactListAdapter()
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityUsersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentHomeBinding.inflate(layoutInflater)
-        presenter = HomePresenterImpl(this)
-        return binding.root
+        setUpViews()
     }
 
-    @ExperimentalCoroutinesApi
     @FlowPreview
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupViews()
-        loadMore()
-    }
-
     @ExperimentalCoroutinesApi
-    @FlowPreview
-    private fun setupViews() {
+    private fun setUpViews() {
         binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -62,7 +52,7 @@ class HomeFragment : HomeContract.View, Fragment() {
                 }
             }
         })
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
         binding.searchView.setOnNewSearchRequestListener{
@@ -74,14 +64,9 @@ class HomeFragment : HomeContract.View, Fragment() {
     @FlowPreview
     private fun loadMore(searchTerm: String = binding.searchView.searchTerm, from: Int = adapter.data.size) {
         adapter.setLoading()
-        presenter.loadMore(searchTerm, from)
     }
 
-    override fun showError(error: String) {
-        // TODO: show error here
-    }
-
-    override fun moreLoaded(data: List<HomeMessageEntity>) {
+    fun moreLoaded(data: List<UserItemEntity>) {
         adapter.setData(data)
     }
 
@@ -90,16 +75,11 @@ class HomeFragment : HomeContract.View, Fragment() {
         // inner classes can't have companion objects.
         private const val LIST_ITEM = 0
         private const val LOADING_ITEM = 1
-
-        @JvmStatic
-        fun newInstance() =
-            HomeFragment()
     }
 
+    inner class UsersListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-        val data = mutableListOf<HomeMessageEntity>()
+        val data = mutableListOf<UserItemEntity>()
 
         private var _isLoading = false
         val isLoading: Boolean = _isLoading
@@ -107,9 +87,9 @@ class HomeFragment : HomeContract.View, Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             return if (viewType == LIST_ITEM) {
-                ContactListViewHolder(ItemContactListBinding.inflate(inflater, parent, false))
+                UsersViewHolder(ItemUserBinding.inflate(inflater, parent, false))
             } else {
-                ContactsLoadingItemViewHolder(ItemContactListLoadingBinding.inflate(inflater, parent, false))
+                UsersLoadingItemViewHolder(ItemContactListLoadingBinding.inflate(inflater, parent, false))
             }
         }
 
@@ -122,7 +102,7 @@ class HomeFragment : HomeContract.View, Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if (position < data.size) {
-                holder as ContactListViewHolder
+                holder as UsersViewHolder
                 holder.setData(data[position])
             }
         }
@@ -137,35 +117,33 @@ class HomeFragment : HomeContract.View, Fragment() {
             }
         }
 
-        fun setData(newData: List<HomeMessageEntity>) {
+        fun setData(newData: List<UserItemEntity>) {
             _isLoading = false
             data.addAll(newData)
-            data.sortBy { 0 - it.lastMessageDateTimestamp }
             notifyDataSetChanged()
         }
 
     }
 
-    inner class ContactListViewHolder(
-        private val binding: ItemContactListBinding
+    inner class UsersViewHolder(
+        private val binding: ItemUserBinding
     ): RecyclerView.ViewHolder(binding.root) {
 
-        fun setData(data: HomeMessageEntity) {
-            val storageReference = Firebase.storage.reference.child(data.userProfileUrl)
-            GlideApp.with(requireContext())
+        fun setData(data: UserItemEntity) {
+            val storageReference = Firebase.storage.reference.child(data.about)
+            GlideApp.with(this@UsersActivity)
                 .load(storageReference)
                 .placeholder(R.drawable.ic_baseline_account_circle_96)
                 .error(R.drawable.ic_baseline_cancel_96)
                 .into(binding.userAvatarIv)
 
-            binding.userNicknameTv.text = data.userNickname
-            binding.lastMessageTv.text = data.lastMessage
-            binding.lastMessageTimeTv.text = data.lastMessageDateTimestamp.toHumanReadableDate()
+            binding.userNicknameTv.text = data.username
+            binding.aboutTv.text = data.about
         }
 
     }
 
-    inner class ContactsLoadingItemViewHolder(
+    inner class UsersLoadingItemViewHolder(
         binding: ItemContactListLoadingBinding
     ): RecyclerView.ViewHolder(binding.root)
 }
