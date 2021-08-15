@@ -1,29 +1,31 @@
-package com.ijiki16.messengerapp.users
+package com.ijiki16.messengerapp.users.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.R
+import com.ijiki16.messengerapp.chat.ChatActivity
 import com.ijiki16.messengerapp.databinding.ActivityUsersBinding
-import com.ijiki16.messengerapp.databinding.ItemContactListBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
 import com.ijiki16.messengerapp.databinding.ItemUserBinding
 import com.ijiki16.messengerapp.infrastructure.GlideApp
-import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
-import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
-import com.ijiki16.messengerapp.main.home.view.HomeFragment
+import com.ijiki16.messengerapp.users.UsersContract
+import com.ijiki16.messengerapp.users.model.UserItemEntity
+import com.ijiki16.messengerapp.users.presenter.UsersPresenterImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 
-class UsersActivity : AppCompatActivity() {
+class UsersActivity : UsersContract.View, AppCompatActivity() {
 
     private lateinit var  binding: ActivityUsersBinding
+    private lateinit var presenter: UsersContract.Presenter
     private val adapter = UsersListAdapter()
 
     @FlowPreview
@@ -32,8 +34,10 @@ class UsersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityUsersBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        presenter = UsersPresenterImpl(this)
 
         setUpViews()
+        loadMore()
     }
 
     @FlowPreview
@@ -55,6 +59,10 @@ class UsersActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
+        binding.backArrow.setOnClickListener {
+            onBackPressed()
+        }
+
         binding.searchView.setOnNewSearchRequestListener{
             loadMore(it, 0)
         }
@@ -64,10 +72,28 @@ class UsersActivity : AppCompatActivity() {
     @FlowPreview
     private fun loadMore(searchTerm: String = binding.searchView.searchTerm, from: Int = adapter.data.size) {
         adapter.setLoading()
+        presenter.loadMore(searchTerm, from)
     }
 
-    fun moreLoaded(data: List<UserItemEntity>) {
+    override fun moreLoaded(data: List<UserItemEntity>) {
+        adapter.appendData(data)
+    }
+
+    override fun dataLoaded(data: List<UserItemEntity>) {
+        if (data.isEmpty()) {
+            showNoDataScreen(true)
+        } else {
+            showNoDataScreen(false)
+        }
         adapter.setData(data)
+    }
+
+    private fun showNoDataScreen(show: Boolean) {
+        binding.noDataTv.visibility = if(show) View.VISIBLE else View.GONE
+    }
+
+    override fun showError(error: String) {
+        // TODO: show error
     }
 
     companion object {
@@ -118,6 +144,11 @@ class UsersActivity : AppCompatActivity() {
         }
 
         fun setData(newData: List<UserItemEntity>) {
+            data.clear()
+            appendData(newData)
+        }
+
+        fun appendData(newData: List<UserItemEntity>) {
             _isLoading = false
             data.addAll(newData)
             notifyDataSetChanged()
@@ -130,7 +161,7 @@ class UsersActivity : AppCompatActivity() {
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun setData(data: UserItemEntity) {
-            val storageReference = Firebase.storage.reference.child(data.about)
+            val storageReference = Firebase.storage.reference.child(data.profileUrl)
             GlideApp.with(this@UsersActivity)
                 .load(storageReference)
                 .placeholder(R.drawable.ic_baseline_account_circle_96)
@@ -139,6 +170,14 @@ class UsersActivity : AppCompatActivity() {
 
             binding.userNicknameTv.text = data.username
             binding.aboutTv.text = data.about
+
+            binding.root.setOnClickListener {
+                openMessagingActivity(data.userId)
+            }
+        }
+
+        private fun openMessagingActivity(userId: String) {
+            ChatActivity.startChatActivity(this@UsersActivity, userId)
         }
 
     }

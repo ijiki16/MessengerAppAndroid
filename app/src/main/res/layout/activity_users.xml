@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".users.UsersActivity">
+    tools:context=".users.view.UsersActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -31,6 +31,18 @@
             android:layout_height="wrap_content" />
 
     </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/no_data_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_700"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/spacing_m"
+        android:textSize="@dimen/user_not_found_text_size"
+        android:text="@string/user_not_found"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

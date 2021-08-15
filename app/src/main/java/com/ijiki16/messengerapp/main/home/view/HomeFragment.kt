@@ -11,9 +11,11 @@ import com.bumptech.glide.Glide
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.R
+import com.ijiki16.messengerapp.chat.ChatActivity
 import com.ijiki16.messengerapp.databinding.FragmentHomeBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
+import com.ijiki16.messengerapp.infrastructure.AppPreferences
 import com.ijiki16.messengerapp.infrastructure.GlideApp
 import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
 import com.ijiki16.messengerapp.main.home.HomeContract
@@ -66,24 +68,31 @@ class HomeFragment : HomeContract.View, Fragment() {
         binding.recyclerView.adapter = adapter
 
         binding.searchView.setOnNewSearchRequestListener{
-            loadMore(it, 0)
+            loadMore(it)
         }
     }
 
     @ExperimentalCoroutinesApi
     @FlowPreview
-    private fun loadMore(searchTerm: String = binding.searchView.searchTerm, from: Int = adapter.data.size) {
+    private fun loadMore(searchTerm: String = binding.searchView.searchTerm) {
         adapter.setLoading()
-        presenter.loadMore(searchTerm, from)
+        presenter.loadUsers(searchTerm)
     }
 
     override fun showError(error: String) {
         // TODO: show error here
     }
 
-    override fun moreLoaded(data: List<HomeMessageEntity>) {
+    override fun rawDataLoaded(data: List<HomeMessageEntity>) {
         adapter.setData(data)
+        data.forEach {
+            if (it.userNickname == null) {
+                presenter.populateUser(it)
+            }
+        }
     }
+
+    override fun userPopulated(data: HomeMessageEntity) = adapter.populateUser(data)
 
     companion object {
         // https://stackoverflow.com/questions/34819334/kotlin-factory-on-inner-nested-class
@@ -137,10 +146,18 @@ class HomeFragment : HomeContract.View, Fragment() {
             }
         }
 
+        fun populateUser(user: HomeMessageEntity) {
+            val idx = data.indexOfFirst {
+                it.userId == user.userId
+            }
+            data[idx] = user
+            notifyItemChanged(idx)
+        }
+
         fun setData(newData: List<HomeMessageEntity>) {
+            data.clear()
             _isLoading = false
             data.addAll(newData)
-            data.sortBy { 0 - it.lastMessageDateTimestamp }
             notifyDataSetChanged()
         }
 
@@ -151,16 +168,21 @@ class HomeFragment : HomeContract.View, Fragment() {
     ): RecyclerView.ViewHolder(binding.root) {
 
         fun setData(data: HomeMessageEntity) {
-            val storageReference = Firebase.storage.reference.child(data.userProfileUrl)
+            val storageReference = Firebase.storage.reference
+                .child(data.userProfileUrl ?: AppPreferences.DEFAULT_PROFILE_URL)
             GlideApp.with(requireContext())
                 .load(storageReference)
                 .placeholder(R.drawable.ic_baseline_account_circle_96)
                 .error(R.drawable.ic_baseline_cancel_96)
                 .into(binding.userAvatarIv)
 
-            binding.userNicknameTv.text = data.userNickname
+            binding.userNicknameTv.text = data.userNickname ?: ""
             binding.lastMessageTv.text = data.lastMessage
             binding.lastMessageTimeTv.text = data.lastMessageDateTimestamp.toHumanReadableDate()
+
+            binding.root.setOnClickListener {
+                ChatActivity.startChatActivity(requireContext(), data.userId)
+            }
         }
 
     }

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.ijiki16.messengerapp.main.MainActivity
 import com.ijiki16.messengerapp.R
@@ -21,6 +22,7 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
     private var isRegistering = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Firebase.database.setPersistenceEnabled(true)
         super.onCreate(savedInstanceState)
         binding = ActivityLauncherBinding.inflate(layoutInflater)
         setContentView(binding.root)

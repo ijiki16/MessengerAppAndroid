@@ -8,9 +8,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ijiki16.messengerapp.databinding.ViewSearchMessengerBinding
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
@@ -28,13 +26,14 @@ class MessengerSearchView @JvmOverloads constructor(
     val searchTerm = if(binding.searchText.text?.length?:0 > 2) binding.searchText.text.toString() else ""
 
     init {
+        val scope = MainScope()
         binding
             .searchText
             .textChanges()
             .debounce(1500)
             .onEach {
                 searchRequestListener?.onSearchRequest(it)
-            }.launchIn(GlobalScope)
+            }.launchIn(scope)
 
     }
 

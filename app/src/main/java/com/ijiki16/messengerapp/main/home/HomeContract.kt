@@ -5,12 +5,14 @@ import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
 interface HomeContract {
 
     interface Presenter {
-        fun loadMore(term: String, from: Int)
+        fun loadUsers(term: String)
+        fun populateUser(data: HomeMessageEntity)
     }
 
     interface View {
         fun showError(error: String)
-        fun moreLoaded(data: List<HomeMessageEntity>)
+        fun rawDataLoaded(data: List<HomeMessageEntity>)
+        fun userPopulated(data: HomeMessageEntity)
     }
 
 }
