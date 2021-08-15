@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MessengerApp">
-        <activity android:name=".chat.ChatActivity"></activity>
+        <activity android:name=".chat.view.ChatActivity"></activity>
         <activity android:name=".users.view.UsersActivity" />
         <activity android:name=".main.MainActivity" />
         <activity android:name=".launcher.view.LauncherActivity">
