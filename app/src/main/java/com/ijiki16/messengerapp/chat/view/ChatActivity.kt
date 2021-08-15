@@ -72,6 +72,7 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
                     System.currentTimeMillis()
                 )
             )
+            binding.messageEt.setText("")
         }
 
     }
