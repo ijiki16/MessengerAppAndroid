@@ -142,8 +142,6 @@ class ProfileFragment : ProfileContract.View, Fragment() {
 
     companion object {
 
-        private const val REQUEST_CODE = 1999
-
         @JvmStatic
         fun newInstance() = ProfileFragment()
 

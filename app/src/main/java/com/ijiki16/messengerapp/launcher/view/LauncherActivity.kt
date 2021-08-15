@@ -49,8 +49,14 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
             val password = binding.passwordEt.text.toString()
             val about = binding.aboutEt.text.toString()
 
+            if (username.length < 3 || password.length < 3) {
+                return@setOnClickListener
+            }
+
             if (isRegistering) {
-                register(username, password, about)
+                if (about.length >= 3) {
+                    register(username, password, about)
+                }
             } else {
                 logIn(username, password)
             }

@@ -29,6 +29,7 @@ class LauncherActivityInteractor(private val presenter: LauncherActivityContract
                     userInfo[DB_PROFILE_KEY].toString(),
                 )
             )
+            presenter.onLogInResult(LoginResult(true, ""))
         }.addOnFailureListener {
             presenter.onLogInResult(LoginResult(false, "Connection to database was lost."))
         }

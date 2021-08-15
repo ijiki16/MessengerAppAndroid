@@ -41,6 +41,8 @@ class ProfilePresenterImpl(
         val usersReference = database.getReference(DB_USERS)
         val userReference = usersReference.child(uid)
 
+        Firebase.auth.currentUser?.updateEmail("$username@messenger.app")
+
         userReference.child(DB_USERNAME).setValue(username)
             .continueWithTask {
                 userReference.child(DB_ABOUT_KEY).setValue(about)
