@@ -190,7 +190,7 @@ class HomeFragment : HomeContract.View, Fragment() {
             binding.root.setOnClickListener {
                 ChatActivity.startChatActivity(requireContext(),
                     data.userId, data.userProfileUrl ?: AppPreferences.DEFAULT_PROFILE_URL,
-                    data.userNickname?: "")
+                    data.userNickname ?: "", data.userAbout ?: "")
             }
         }
 

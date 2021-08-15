@@ -24,6 +24,7 @@
     <dimen name="login_btn_height">35dp</dimen>
     <dimen name="login_btn_text_size">18sp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="app_bar_height_chat">150dp</dimen>
     <dimen name="app_bar_bg_height">250dp</dimen>
     <dimen name="bottom_app_bar_height">56dp</dimen>
     <dimen name="contact_list_loader_height">60dp</dimen>
@@ -34,4 +35,10 @@
     <dimen name="search_view_radius">50dp</dimen>
     <dimen name="search_drawable_padding">15dp</dimen>
     <dimen name="user_not_found_text_size">24sp</dimen>
+    <dimen name="msg_user_name_size">24sp</dimen>
+    <dimen name="msg_back_arrow_size">60dp</dimen>
+    <dimen name="msg_profile_corner_size">50dp</dimen>
+    <dimen name="msg_profile_size">50dp</dimen>
+    <dimen name="msg_corner_radius">15dp</dimen>
+
 </resources>

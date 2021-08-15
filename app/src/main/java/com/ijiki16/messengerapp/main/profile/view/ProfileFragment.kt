@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.ktx.auth
@@ -111,7 +112,7 @@ class ProfileFragment : ProfileContract.View, Fragment() {
     override fun showError(error: String) {
         binding.profilePictureIv.visibility = View.VISIBLE
         binding.profilePicturePb.visibility = View.GONE
-        // TODO: add feedback for errors.
+        Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
     override fun loggedOut() {

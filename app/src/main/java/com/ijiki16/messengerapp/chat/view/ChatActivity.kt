@@ -6,13 +6,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import com.ijiki16.messengerapp.R
 import com.ijiki16.messengerapp.chat.ChatContract
 import com.ijiki16.messengerapp.chat.model.MessageModel
 import com.ijiki16.messengerapp.chat.presenter.ChatPresenterImpl
 import com.ijiki16.messengerapp.databinding.*
-import com.ijiki16.messengerapp.main.home.view.HomeFragment
+import com.ijiki16.messengerapp.infrastructure.GlideApp
+import com.ijiki16.messengerapp.infrastructure.toHumanReadableDate
 
 class ChatActivity : ChatContract.View, AppCompatActivity() {
 
@@ -21,6 +26,7 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
     private val userId: String by lazy { intent.getStringExtra(USER_ID)!! }
     private val userProfilePic: String by lazy { intent.getStringExtra(USER_PROFILE)!! }
     private val userNickname: String by lazy { intent.getStringExtra(USER_NICKNAME)!! }
+    private val userAbout: String by lazy { intent.getStringExtra(USER_ABOUT)!! }
 
     private lateinit var presenter: ChatContract.Presenter
     private val adapter = ChatAdapter()
@@ -44,7 +50,17 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
-        // TODO: set userProfilePic and userNickname
+        binding.userAbout.text = userAbout
+        binding.userName.text = userNickname
+
+        binding.backButton.setOnClickListener { onBackPressed() }
+
+        val storageReference = Firebase.storage.reference.child(userProfilePic)
+        GlideApp.with(this)
+            .load(storageReference)
+            .placeholder(R.drawable.ic_baseline_account_circle_96)
+            .error(R.drawable.ic_baseline_cancel_96)
+            .into(binding.userAvatar)
     }
 
     override fun chatLoaded(data: List<MessageModel>) {
@@ -52,7 +68,7 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
     }
 
     override fun showError(error: String) {
-        // TODO: show error
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
     inner class ChatAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -90,7 +106,8 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
     ) : ChatView, RecyclerView.ViewHolder(binding.root) {
 
         override fun setData(data: MessageModel) {
-            // TODO: not yet implemented
+            binding.messageTime.text = data.sendDateTimestamp.toHumanReadableDate()
+            binding.messageView.text = data.text
         }
 
     }
@@ -100,7 +117,8 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
     ) : ChatView, RecyclerView.ViewHolder(binding.root) {
 
         override fun setData(data: MessageModel) {
-            // TODO: not yet implemented
+            binding.messageTime.text = data.sendDateTimestamp.toHumanReadableDate()
+            binding.messageView.text = data.text
         }
 
     }
@@ -113,6 +131,7 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
         private const val USER_ID = "user_id"
         private const val USER_PROFILE = "user_profile"
         private const val USER_NICKNAME = "user_nickname"
+        private const val USER_ABOUT = "user_about"
 
         private const val ITEM_LEFT = 0
         private const val ITEM_RIGHT = 1
@@ -122,12 +141,14 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
             context: Context,
             userId: String,
             userProfilePic: String,
-            userNickname: String
+            userNickname: String,
+            userAbout: String
         ) {
             val myIntent = Intent(context, ChatActivity::class.java)
             myIntent.putExtra(USER_ID, userId)
             myIntent.putExtra(USER_PROFILE, userProfilePic)
             myIntent.putExtra(USER_NICKNAME, userNickname)
+            myIntent.putExtra(USER_ABOUT, userAbout)
             context.startActivity(myIntent)
         }
     }

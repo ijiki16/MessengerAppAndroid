@@ -8,5 +8,6 @@ data class HomeMessageEntity(
     val lastMessage: String,
     val userProfileUrl: String?,
     val lastMessageDateTimestamp: Long,
-    val userNickname: String?
+    val userNickname: String?,
+    val userAbout: String?
 )

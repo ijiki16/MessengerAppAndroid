@@ -70,7 +70,8 @@ class HomePresenterImpl(
                                 lastMessage[DB_TEXT].toString(),
                                 userData?.userProfileUrl,
                                 lastMessageObj.key.toString().toLong(),
-                                userData?.userNickname
+                                userData?.userNickname,
+                                userData?.userAbout
                             )
                             val idx = usersDataSnapshot.indexOfFirst { user -> user.userId == result.userId }
                             if (idx != -1) {
@@ -101,7 +102,8 @@ class HomePresenterImpl(
                 data.lastMessage,
                 userInfo[DB_PROFILE_KEY].toString(),
                 data.lastMessageDateTimestamp,
-                userInfo[DB_USERNAME].toString()
+                userInfo[DB_USERNAME].toString(),
+                userInfo[DB_ABOUT_KEY].toString(),
             )
             val index = usersDataSnapshot.indexOfFirst { user-> user.userId == data.userId }
             usersDataSnapshot[index] = result
@@ -116,6 +118,7 @@ class HomePresenterImpl(
         const val DB_TEXT = "text"
         const val DB_PROFILE_KEY = "profile"
         const val DB_USERNAME = "username"
+        const val DB_ABOUT_KEY = "about"
     }
 
 }

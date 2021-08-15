@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -119,7 +120,7 @@ class LauncherActivity : LauncherActivityContract.View, Activity() {
 
     override fun showError(error: String) {
         setLoadingState(false)
-        // TODO: add feedback for errors.
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
 }

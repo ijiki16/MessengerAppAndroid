@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
@@ -92,7 +93,7 @@ class UsersActivity : UsersContract.View, AppCompatActivity() {
     }
 
     override fun showError(error: String) {
-        // TODO: show error
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 
     companion object {
@@ -171,12 +172,12 @@ class UsersActivity : UsersContract.View, AppCompatActivity() {
             binding.aboutTv.text = data.about
 
             binding.root.setOnClickListener {
-                openMessagingActivity(data.userId, data.profileUrl, data.username)
+                openMessagingActivity(data.userId, data.profileUrl, data.username, data.about)
             }
         }
 
-        private fun openMessagingActivity(userId: String, profilePic: String, username: String) {
-            ChatActivity.startChatActivity(this@UsersActivity, userId, profilePic, username)
+        private fun openMessagingActivity(userId: String, profilePic: String, username: String, about: String) {
+            ChatActivity.startChatActivity(this@UsersActivity, userId, profilePic, username, about)
         }
 
     }
