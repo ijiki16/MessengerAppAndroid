@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.R
-import com.ijiki16.messengerapp.chat.ChatActivity
+import com.ijiki16.messengerapp.chat.view.ChatActivity
 import com.ijiki16.messengerapp.databinding.FragmentHomeBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
@@ -187,7 +187,9 @@ class HomeFragment : HomeContract.View, Fragment() {
             binding.lastMessageTimeTv.text = data.lastMessageDateTimestamp.toHumanReadableDate()
 
             binding.root.setOnClickListener {
-                ChatActivity.startChatActivity(requireContext(), data.userId)
+                ChatActivity.startChatActivity(requireContext(),
+                    data.userId, data.userProfileUrl ?: AppPreferences.DEFAULT_PROFILE_URL,
+                    data.userNickname?: "")
             }
         }
 

@@ -1,6 +1,5 @@
 package com.ijiki16.messengerapp.users.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ijiki16.messengerapp.R
-import com.ijiki16.messengerapp.chat.ChatActivity
+import com.ijiki16.messengerapp.chat.view.ChatActivity
 import com.ijiki16.messengerapp.databinding.ActivityUsersBinding
 import com.ijiki16.messengerapp.databinding.ItemContactListLoadingBinding
 import com.ijiki16.messengerapp.databinding.ItemUserBinding
