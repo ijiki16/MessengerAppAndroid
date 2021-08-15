@@ -6,7 +6,7 @@ interface ChatContract {
 
     interface Presenter {
         fun loadChat(userId: String)
-        fun sendMessage(message: MessageModel)
+        fun sendMessage(userId: String, message: MessageModel)
     }
 
     interface View {

@@ -48,8 +48,28 @@ class ChatPresenterImpl(private val view: ChatContract.View): ChatContract.Prese
             })
     }
 
-    override fun sendMessage(message: MessageModel) {
-        TODO("Not yet implemented")
+    override fun sendMessage(userId: String, message: MessageModel) {
+        val database = Firebase.database
+        val messagesReference = database.getReference(HomePresenterImpl.DB_MESSAGES)
+
+        val myUserId = Firebase.auth.currentUser?.uid!!
+
+        val childKey = if(userId > myUserId) "$myUserId|$userId" else "$userId|$myUserId"
+        messagesReference.child(childKey)
+            .get().addOnSuccessListener {
+                val messageRef = messagesReference.child(childKey)
+                    .child(message.sendDateTimestamp.toString())
+
+                messageRef.child(DB_AUTHOR).setValue(if(message.sentByMe) myUserId else userId)
+                    .continueWithTask {
+                        messageRef.child(DB_TEXT).setValue(message.text)
+                    }
+                    .addOnFailureListener {
+                        view.showError(it.message ?: "Error sending message.")
+                    }
+            }.addOnFailureListener {
+                view.showError(it.message ?: "Database connection lost.")
+            }
     }
 
     companion object {

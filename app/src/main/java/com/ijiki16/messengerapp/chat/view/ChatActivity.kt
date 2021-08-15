@@ -2,11 +2,12 @@ package com.ijiki16.messengerapp.chat.view
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.ktx.Firebase
@@ -47,7 +48,7 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
     }
 
     private fun setUpViews() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, true)
         binding.recyclerView.adapter = adapter
 
         binding.userAbout.text = userAbout
@@ -61,10 +62,22 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
             .placeholder(R.drawable.ic_baseline_account_circle_96)
             .error(R.drawable.ic_baseline_cancel_96)
             .into(binding.userAvatar)
+
+        binding.sendIv.setOnClickListener {
+            presenter.sendMessage(
+                userId,
+                MessageModel(
+                    true,
+                    binding.messageEt.text.toString(),
+                    System.currentTimeMillis()
+                )
+            )
+        }
+
     }
 
     override fun chatLoaded(data: List<MessageModel>) {
-        adapter.setData(data)
+        adapter.setData(data.sortedByDescending { it.sendDateTimestamp })
     }
 
     override fun showError(error: String) {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,116 +8,120 @@
     android:fitsSystemWindows="true"
     tools:context=".main.MainActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height_chat"
-        android:background="@color/blue_500"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.MessengerApp.AppBarOverlay"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/blue_500"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleGravity="bottom"
-            app:expandedTitleMarginEnd="@dimen/spacing_xs"
-            app:expandedTitleMarginStart="@dimen/spacing_xs"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+        <ImageView
+            android:id="@+id/back_button"
+            android:layout_width="@dimen/msg_back_arrow_size"
+            android:layout_height="@dimen/msg_back_arrow_size"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/back_button"
+            app:layout_constraintEnd_toStartOf="@+id/cardView"
+            app:layout_constraintStart_toEndOf="@+id/back_button"
+            app:layout_constraintTop_toTopOf="@+id/back_button">
+
+            <TextView
+                android:id="@+id/user_name"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/search_view_container_height"
-                android:layout_gravity="bottom"
-                app:popupTheme="@style/Theme.MessengerApp.PopupOverlay">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_xxs"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/msg_user_name_size"
+                android:textStyle="bold"
+                tools:text="Muhamed" />
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/constraint_layout_wrapper"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            <TextView
+                android:id="@+id/user_about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/spacing_xxs"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                tools:text="professor" />
 
-                    <ImageView
-                        android:id="@+id/back_button"
-                        android:layout_width="@dimen/msg_back_arrow_size"
-                        android:layout_height="@dimen/msg_back_arrow_size"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/white" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/back_button"
-                        app:layout_constraintEnd_toStartOf="@+id/cardView"
-                        app:layout_constraintStart_toEndOf="@+id/back_button"
-                        app:layout_constraintTop_toTopOf="@+id/back_button">
-
-                        <TextView
-                            android:id="@+id/user_name"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/spacing_xxs"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/msg_user_name_size"
-                            android:textStyle="bold"
-                            tools:text="Muhamed" />
-
-                        <TextView
-                            android:id="@+id/user_about"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="@dimen/spacing_xxs"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:textColor="@color/white"
-                            tools:text="professor" />
-
-                    </LinearLayout>
+        </LinearLayout>
 
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardView"
-                        android:layout_width="@dimen/msg_profile_size"
-                        android:layout_height="@dimen/msg_profile_size"
-                        android:layout_centerHorizontal="true"
-                        app:cardCornerRadius="@dimen/msg_profile_corner_size"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="@dimen/msg_profile_size"
+            android:layout_height="@dimen/msg_profile_size"
+            android:layout_margin="@dimen/spacing_xs"
+            android:layout_centerHorizontal="true"
+            app:cardCornerRadius="@dimen/msg_profile_corner_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                        <ImageView
-                            android:id="@+id/user_avatar"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/user_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
 
-                    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.appcompat.widget.Toolbar>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/spacing_s"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@+id/message_et"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraint_layout_wrapper" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <EditText
+        android:id="@+id/message_et"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="@dimen/spacing_s"
+        android:hint="@string/message"
+        android:textColor="@color/gray"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/chat_text_size"
+        android:paddingStart="@dimen/spacing_s"
+        android:paddingEnd="@dimen/spacing_xxl"
+        android:backgroundTint="@color/chat_input_gray"
+        android:background="@drawable/shape_search_view_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/send_iv"
+        android:layout_width="@dimen/spacing_m"
+        android:layout_height="@dimen/spacing_m"
+        android:src="@drawable/ic_baseline_send_24"
+        android:layout_marginEnd="@dimen/spacing_xs"
+        app:layout_constraintBottom_toBottomOf="@+id/message_et"
+        app:layout_constraintEnd_toEndOf="@+id/message_et"
+        app:layout_constraintTop_toTopOf="@+id/message_et" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

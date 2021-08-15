@@ -10,6 +10,7 @@
     <color name="error_red">#CA1717</color>
 
     <color name="aqua">#f3f6ff</color>
+    <color name="chat_input_gray">#DBDBDF</color>
     <color name="gray">#aaa</color>
     <color name="dark_gray">#777</color>
     <color name="blue">#5479F1</color>
