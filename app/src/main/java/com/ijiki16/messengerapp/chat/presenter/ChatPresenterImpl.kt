@@ -25,11 +25,19 @@ class ChatPresenterImpl(private val view: ChatContract.View): ChatContract.Prese
                     if (snapshot.value == null) {
                         view.chatLoaded(emptyList())
                     } else {
-                        (snapshot.value as HashMap<*, *>)
+                        val messages = (snapshot.value as HashMap<*, *>)
                             .entries
-                            .forEach { entry ->
-                                entry
+                            .map { entry ->
+                                val timestamp = entry.key.toString().toLong()
+                                val messageProps = (entry.value as HashMap<*, *>)
+
+                                MessageModel(
+                                    messageProps[DB_AUTHOR].toString() == myUserId,
+                                    messageProps[DB_TEXT].toString(),
+                                    timestamp
+                                )
                             }
+                        view.chatLoaded(messages)
                     }
                 }
 
@@ -42,5 +50,10 @@ class ChatPresenterImpl(private val view: ChatContract.View): ChatContract.Prese
 
     override fun sendMessage(message: MessageModel) {
         TODO("Not yet implemented")
+    }
+
+    companion object {
+        const val DB_AUTHOR = "author"
+        const val DB_TEXT = "text"
     }
 }
