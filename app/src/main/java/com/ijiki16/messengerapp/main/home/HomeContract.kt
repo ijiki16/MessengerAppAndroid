@@ -5,7 +5,8 @@ import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
 interface HomeContract {
 
     interface Presenter {
-        fun loadUsers(term: String)
+        fun setTerm(newTerm: String)
+        fun loadUsers()
         fun populateUser(data: HomeMessageEntity)
     }
 

@@ -15,10 +15,18 @@ class HomePresenterImpl(
     private val view: HomeContract.View
 ) : HomeContract.Presenter {
 
+    // cached data
     private var usersDataSnapshot =
         java.util.Collections.synchronizedList(mutableListOf<HomeMessageEntity>())
 
-    override fun loadUsers(term: String) {
+    private var term: String = ""
+
+    override fun setTerm(newTerm: String) {
+        term = newTerm
+        view.rawDataLoaded(usersDataSnapshot.filter { it.userNickname == null ||  it.userNickname.contains(term) })
+    }
+
+    override fun loadUsers() {
         val database = Firebase.database
         val usersReference = database.getReference(DB_MESSAGES)
 
@@ -53,17 +61,22 @@ class HomePresenterImpl(
                             val userData =
                                 usersDataSnapshot.firstOrNull { user -> user.userId == userId }
 
-                            HomeMessageEntity(
+                            val result = HomeMessageEntity(
                                 userId,
                                 lastMessage[DB_TEXT].toString(),
                                 userData?.userProfileUrl,
                                 lastMessageObj.key.toString().toLong(),
                                 userData?.userNickname
                             )
+                            val idx = usersDataSnapshot.indexOfFirst { user -> user.userId == result.userId }
+                            if (idx != -1) {
+                                usersDataSnapshot[idx] = result
+                            } else {
+                                usersDataSnapshot.add(result)
+                            }
+                            result
                         }
-                    usersDataSnapshot.clear()
-                    usersDataSnapshot.addAll(data)
-                    view.rawDataLoaded(data)
+                    view.rawDataLoaded(data.filter { it.userNickname == null || it.userNickname.contains(term) })
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {

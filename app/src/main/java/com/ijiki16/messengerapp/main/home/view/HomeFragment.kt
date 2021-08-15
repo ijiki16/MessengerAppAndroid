@@ -23,6 +23,7 @@ import com.ijiki16.messengerapp.main.home.model.HomeMessageEntity
 import com.ijiki16.messengerapp.main.home.presenter.HomePresenterImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import java.util.concurrent.atomic.AtomicInteger
 
 
 class HomeFragment : HomeContract.View, Fragment() {
@@ -51,32 +52,17 @@ class HomeFragment : HomeContract.View, Fragment() {
     @ExperimentalCoroutinesApi
     @FlowPreview
     private fun setupViews() {
-        binding.recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager?
-
-                if (!adapter.isLoading) {
-                    if (linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == adapter.data.size - 1) {
-                        loadMore()
-                    }
-                }
-            }
-        })
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = adapter
 
-        binding.searchView.setOnNewSearchRequestListener{
-            loadMore(it)
+        binding.searchView.setOnNewSearchRequestListener {
+            presenter.setTerm(it)
         }
     }
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    private fun loadMore(searchTerm: String = binding.searchView.searchTerm) {
+    private fun loadMore() {
         adapter.setLoading()
-        presenter.loadUsers(searchTerm)
+        presenter.loadUsers()
     }
 
     override fun showError(error: String) {
@@ -84,7 +70,8 @@ class HomeFragment : HomeContract.View, Fragment() {
     }
 
     override fun rawDataLoaded(data: List<HomeMessageEntity>) {
-        adapter.setData(data)
+        adapter.setData(data.sortedByDescending { it.lastMessageDateTimestamp })
+        adapter.setUnpopulated(data.count { it.userNickname == null })
         data.forEach {
             if (it.userNickname == null) {
                 presenter.populateUser(it)
@@ -106,19 +93,27 @@ class HomeFragment : HomeContract.View, Fragment() {
     }
 
 
-    inner class ContactListAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class ContactListAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         val data = mutableListOf<HomeMessageEntity>()
 
         private var _isLoading = false
         val isLoading: Boolean = _isLoading
 
+        private var unpopulated = AtomicInteger(0)
+
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             return if (viewType == LIST_ITEM) {
                 ContactListViewHolder(ItemContactListBinding.inflate(inflater, parent, false))
             } else {
-                ContactsLoadingItemViewHolder(ItemContactListLoadingBinding.inflate(inflater, parent, false))
+                ContactsLoadingItemViewHolder(
+                    ItemContactListLoadingBinding.inflate(
+                        inflater,
+                        parent,
+                        false
+                    )
+                )
             }
         }
 
@@ -137,10 +132,10 @@ class HomeFragment : HomeContract.View, Fragment() {
         }
 
         override fun getItemCount(): Int =
-            if(_isLoading) data.size + 1 else data.size
+            if (_isLoading) data.size + 1 else data.size
 
         fun setLoading() {
-            if(!_isLoading) {
+            if (!_isLoading) {
                 _isLoading = true
                 notifyDataSetChanged()
             }
@@ -151,12 +146,23 @@ class HomeFragment : HomeContract.View, Fragment() {
                 it.userId == user.userId
             }
             data[idx] = user
-            notifyItemChanged(idx)
+            if (unpopulated.decrementAndGet() <=0) {
+                _isLoading = false
+                notifyDataSetChanged()
+            } else {
+                notifyItemChanged(idx)
+            }
+        }
+
+        fun setUnpopulated(newUnpopulated: Int) {
+            unpopulated.set(newUnpopulated)
         }
 
         fun setData(newData: List<HomeMessageEntity>) {
             data.clear()
-            _isLoading = false
+            if (unpopulated.get() <= 0) {
+                _isLoading = false
+            }
             data.addAll(newData)
             notifyDataSetChanged()
         }
@@ -165,7 +171,7 @@ class HomeFragment : HomeContract.View, Fragment() {
 
     inner class ContactListViewHolder(
         private val binding: ItemContactListBinding
-    ): RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun setData(data: HomeMessageEntity) {
             val storageReference = Firebase.storage.reference
@@ -189,5 +195,5 @@ class HomeFragment : HomeContract.View, Fragment() {
 
     inner class ContactsLoadingItemViewHolder(
         binding: ItemContactListLoadingBinding
-    ): RecyclerView.ViewHolder(binding.root)
+    ) : RecyclerView.ViewHolder(binding.root)
 }
