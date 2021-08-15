@@ -20,7 +20,7 @@
     </style>
 
 
-    <style name="Theme.MessengerApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.MessengerApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 
     <style name="Theme.MessengerApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
