@@ -28,16 +28,20 @@ class HomePresenterImpl(
 
     override fun loadUsers() {
         val database = Firebase.database
-        val usersReference = database.getReference(DB_MESSAGES)
+        val messagesReference = database.getReference(DB_MESSAGES)
 
         val myUserId = Firebase.auth.currentUser?.uid!!
 
         // Realtime database does not have sql "like" query so we have to load everything at once here :(
         // https://stackoverflow.com/questions/44942917/how-to-implement-sqlite-like-query-in-android-firebase-database
-        usersReference
+        messagesReference
             .orderByKey()
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.value == null) {
+                        view.rawDataLoaded(emptyList())
+                        return
+                    }
                     // k: user1|user2, v: conversationObj
                     val myConversations = (dataSnapshot.value as HashMap<*, *>)
                         .filter { (it.key as String).contains(myUserId) }

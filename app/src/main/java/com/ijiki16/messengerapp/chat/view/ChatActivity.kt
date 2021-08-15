@@ -13,6 +13,8 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
 
     private lateinit var binding: ActivityChatBinding
     private val userId: String by lazy { intent.getStringExtra(USER_ID)!! }
+    private val userProfilePic: String by lazy { intent.getStringExtra(USER_PROFILE)!! }
+    private val userNickname: String by lazy { intent.getStringExtra(USER_NICKNAME)!! }
     private lateinit var presenter: ChatContract.Presenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +46,8 @@ class ChatActivity : ChatContract.View, AppCompatActivity() {
 
     companion object {
         private const val USER_ID = "user_id"
+        private const val USER_PROFILE = "user_profile"
+        private const val USER_NICKNAME = "user_nickname"
 
         @JvmStatic
         fun startChatActivity(context: Context, userId: String, userProfilePic: String, userNickname: String) {

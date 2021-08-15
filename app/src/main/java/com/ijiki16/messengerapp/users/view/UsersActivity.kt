@@ -171,12 +171,12 @@ class UsersActivity : UsersContract.View, AppCompatActivity() {
             binding.aboutTv.text = data.about
 
             binding.root.setOnClickListener {
-                openMessagingActivity(data.userId)
+                openMessagingActivity(data.userId, data.profileUrl, data.username)
             }
         }
 
-        private fun openMessagingActivity(userId: String) {
-            ChatActivity.startChatActivity(this@UsersActivity, userId)
+        private fun openMessagingActivity(userId: String, profilePic: String, username: String) {
+            ChatActivity.startChatActivity(this@UsersActivity, userId, profilePic, username)
         }
 
     }
